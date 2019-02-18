@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+    PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.tedu.mall.mapper.GoodsCategoryMapper">
+
+	
+
+	<select id="getCategories" resultType="cn.tedu.mall.entity.GoodsCategory"> 
+
+		select 
+			id, 
+			parent_id as parentId,
+			name, 
+			status, 
+			sort_order as sortOrder, 
+			is_parent as isParent,
+			created_time as create_time,
+			modified_time as modify_time,
+			created_user as createUser,
+			modified_user as modifyUser
+		from 
+			t_goods_category 
+		where 
+			id = #{rootId}
+
+		union
+		
+		(select 
+			id, 
+			parent_id as parentId,
+			name, 
+			status, 
+			sort_order as sortOrder, 
+			is_parent as isParent,
+			created_time as create_time,
+			modified_time as modify_time,
+			created_user as createUser,
+			modified_user as modifyUser
+		from 
+			t_goods_category 
+		where 
+			parent_id =#{rootId} and status=1		
+		order by sort_order)
+		
+		union	
+		
+		(select 
+			id, 
+			parent_id as parentId,
+			name, 
+			status, 
+			sort_order as sortOrder, 
+			is_parent as isParent,
+			created_time as create_time,
+			modified_time as modify_time,
+			created_user as createUser,
+			modified_user as modifyUser
+		from 
+			t_goods_category 
+		where 
+			parent_id in (
+				select t.id 
+				from t_goods_category t 
+				where t.parent_id=#{rootId} and t.status=1
+			) and status=1
+		order by sort_order)
+								
+	</select>
+	
+	<select id="getCategoryById" resultType="cn.tedu.mall.entity.GoodsCategory">
+		select 
+			id, 
+			parent_id as parentId,
+			name, 
+			status, 
+			sort_order as sortOrder, 
+			is_parent as isParent,
+			created_time as create_time,
+			modified_time as modify_time,
+			created_user as createUser,
+			modified_user as modifyUser
+		from 
+			t_goods_category 
+		where 
+			id = #{rootId}
+	</select>
+
+</mapper>

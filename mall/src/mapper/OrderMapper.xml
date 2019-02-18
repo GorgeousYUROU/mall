@@ -1,0 +1,140 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+    PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.tedu.mall.mapper.OrderMapper">
+
+	<select id="getProvinceIdByName" resultType="String">
+	select province_code
+		from t_dict_provinces
+		where province_name=#{recv_province};
+	</select>
+	
+	<select id="getCityIdByName" resultType="String">
+	select city_code
+		from t_dict_cities
+		where city_name=#{recv_city} and province_code=#{recv_province_id};
+	</select>
+	
+	<select id="getAreaIdByName" resultType="String">
+	select area_code
+		from t_dict_areas
+		where area_name=#{recv_area} and city_code=#{recv_city_id};
+	</select>
+
+	<insert id="addAddress" parameterType="cn.tedu.mall.entity.Address" > 
+	insert into t_address
+	(   id,
+		uid,
+		recv_name,
+		recv_province,
+		recv_city,
+		recv_area,
+		recv_district,
+		recv_addr,
+		recv_phone,
+		recv_tel,
+		recv_zip,
+		recv_tag,
+		is_default,
+		created_user,
+		created_time,
+		modified_user,
+		modified_time)
+		
+		values(#{id},
+		#{uid},
+		#{recv_name},
+		#{recv_province},
+		#{recv_city},
+		#{recv_area},
+		#{recv_district},
+		#{recv_addr},
+		#{recv_phone},
+		#{recv_tel},
+		#{recv_zip},
+		#{recv_tag},
+		#{is_default},
+		#{created_user},
+		#{created_time},
+		#{modified_user},
+		#{modified_time})
+	</insert>
+	<select id="getAllAddressByUId" resultType="cn.tedu.mall.entity.Address">
+	select 
+		id,
+		uid,
+		recv_name,
+		recv_province,
+		recv_city,
+		recv_area,
+		recv_district,
+		recv_addr,
+		recv_phone,
+		recv_tel,
+		recv_zip,
+		recv_tag,
+		is_default,
+		created_user,
+		created_time,
+		modified_user,
+		modified_time
+	from t_address
+	where uid=#{uid}
+	</select>
+	
+	<select id="getAddressById" resultType="cn.tedu.mall.entity.Address">
+	
+	select 
+		t_address.id as id,
+		uid,
+		recv_name,
+		province_name as recv_province,
+		city_name as recv_city,
+		area_name as recv_area,
+		recv_district,
+		recv_addr,
+		recv_phone,
+		recv_tel,
+		recv_zip,
+		recv_tag,
+		is_default,
+		created_user,
+		created_time,
+		modified_user,
+		modified_time
+	from t_address,t_dict_provinces,t_dict_cities,t_dict_areas
+	where t_address.id=#{id} and t_address.recv_province=t_dict_provinces.province_code
+	and t_address.recv_city=t_dict_cities.city_code and 
+	t_address.recv_area=t_dict_areas.area_code ;
+	</select>
+	<update id="deleteDefault" parameterType="Integer">
+	update t_address set is_default=0 where is_default=1 and uid=#{uid}
+	</update>
+	
+	<update id="addDefault" parameterType="Integer">
+	update t_address set is_default=1 where  id=#{id}
+	</update>
+	
+	<delete id="deleteAddressById" parameterType="Integer">
+	delete from t_address where id=#{id}
+	</delete>
+	
+	<update id="updateAddress" parameterType="cn.tedu.mall.entity.Address">
+	update t_address 
+	set                               
+	 recv_name=#{recv_name},                    
+	 recv_province=#{recv_province},            
+	 recv_city=#{recv_city},                    
+	 recv_area=#{recv_area},                    
+	 recv_district=#{recv_district},            
+	 recv_addr=#{recv_addr},                    
+	 recv_phone=#{recv_phone},                  
+	 recv_tel=#{recv_tel},                      
+	 recv_zip=#{recv_zip},                      
+	 recv_tag=#{recv_tag},                                                  
+	 modified_user=#{modified_user},            
+	 modified_time=#{modified_time}
+ where id=#{id}
+	</update>
+</mapper>

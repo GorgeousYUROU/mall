@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+    PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+	
+	<mapper namespace="cn.tedu.mall.mapper.MapperUser">
+	<insert id="addUser" parameterType="cn.tedu.mall.entity.User">
+	insert into user(
+	id,
+	name,
+	password,
+	email,
+	mobile,
+	image,
+	gender,
+	create_user,
+	create_time,
+	modify_user,
+	modify_time
+	) 
+	values
+	(
+	#{id},
+	#{name},
+	#{password},
+	#{email},
+	#{mobile},
+	#{image},
+	#{gender},
+	#{create_user},
+	#{create_time},
+	#{modify_user},
+	#{modify_time}
+	)
+	</insert>
+	
+	<select id="getUserByName" resultType="cn.tedu.mall.entity.User">
+	select id,
+	name,
+	password,
+	email,
+	mobile,
+	image,
+	gender,
+	create_user,
+	create_time,
+	modify_user,
+	modify_time
+	from
+		user
+	where name=#{name}
+	</select>
+	
+	<delete id="deleteUserById" >
+	delete 
+		from user
+	where id in
+				<foreach collection="id" item="i" open="(" separator="," close=")">
+					#{i}
+				</foreach>
+	</delete>
+	
+	<update id="renewPaw">
+	update user set password=#{newPaw} where id=#{id}
+	</update>
+	
+	
+	
+	
+	</mapper>
+	
+   

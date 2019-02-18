@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+    PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.tedu.mall.mapper.GoodsMapper">
+
+	
+
+	<select id="getGoods" resultType="cn.tedu.mall.entity.Goods"> 
+	select 
+		 id,
+		 category_id,
+		 item_type,
+		 title,
+		 sell_point,
+		 price,
+		 num,
+		 barcode,
+		 image,
+		 status,
+		 priority,
+		 created_time,
+		 modified_time,
+		 created_user,
+		 modified_user
+	 from t_goods where category_id = #{categoryId};
+
+		
+	</select>
+
+</mapper>
